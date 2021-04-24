@@ -145,14 +145,37 @@ public class Principal {
     }
 
     public void mostrarResultado(ArrayList<TabelaPrecos> listaCompras) {
+        int indisponiveis = 0;
+        int unidades = 0;
+        Float total = Float.valueOf("0");
+        ArrayList<TabelaPrecos> remocoes = new ArrayList<TabelaPrecos>();
+        ArrayList<Fornecedor> fornecedoresEscolhidos = new ArrayList<Fornecedor>();
         System.out.println("====== Lista De Compras ======");
-        System.out.println("");
-        for (TabelaPrecos item : listaCompras) {
-            if (item == null) {
-                System.out.println("Produto indisponível");
+        while (!listaCompras.isEmpty()) {
+            if (listaCompras.get(0) == null) {
+                indisponiveis++;
+                listaCompras.remove(0);
             } else {
-                System.out.println("Item: " + item.getItem().getNome() + " || Fornecedor: " + item.getFornecedor().getNome() + " || Preço: " + item.getPreco() + " || Frete: " + item.getFornecedor().getFrete());
+                for (TabelaPrecos duplicatas : listaCompras) {
+                    if (listaCompras.get(0) == duplicatas) {
+                        unidades++;
+                        remocoes.add(duplicatas);
+                    }
+                }
+                System.out.println(unidades + " x Item: " + listaCompras.get(0).getItem().getNome() + " || Fornecedor: " + listaCompras.get(0).getFornecedor().getNome() + " || Preço: " + listaCompras.get(0).getPreco() + " || Frete: " + listaCompras.get(0).getFornecedor().getFrete());
+                if (fornecedoresEscolhidos.contains(listaCompras.get(0).getFornecedor())) {
+                    total += unidades * listaCompras.get(0).getPreco();
+                } else {
+                    total += unidades * listaCompras.get(0).getPreco() + listaCompras.get(0).getFornecedor().getFrete();
+                    fornecedoresEscolhidos.add(listaCompras.get(0).getFornecedor());
+                }
+                listaCompras.removeAll(remocoes);
+                remocoes.clear();
+                unidades = 0;
             }
         }
+        System.out.println(indisponiveis + " Produtos indisponíveis");
+        System.out.println("=====================================");
+        System.out.println("Valor total: " + total + "R$");
     }
 }
