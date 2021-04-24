@@ -1,7 +1,6 @@
 package sistemavendas;
 
-import java.util.ArrayList;
-
+//A classe fornecedor contem todos os fornecedores registrados
 public class Fornecedor {
     private String nome;
     private Float frete;

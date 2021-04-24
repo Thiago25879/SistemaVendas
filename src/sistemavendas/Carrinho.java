@@ -2,6 +2,7 @@ package sistemavendas;
 
 import java.util.ArrayList;
 
+//Classe carrinho contem a lista dos itens que o usuário deseja
 public class Carrinho {
     private ArrayList<Item> carrinho = new ArrayList<Item>();
 

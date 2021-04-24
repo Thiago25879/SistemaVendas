@@ -76,6 +76,8 @@ public class Principal {
                                     itemTabela = entradaTabela;
                                 } else {
                                     //Fornecedores tem a mesma avaliação média, desempate por preço necessário
+                                    primaria.getTabela()[fornecedores.getEntrada().indexOf(fornecedor1)][fornecedores.getEntrada().indexOf(fornecedor2)] = 3;
+                                    primaria.getTabela()[fornecedores.getEntrada().indexOf(fornecedor2)][fornecedores.getEntrada().indexOf(fornecedor1)] = 3;
                                     int quantidade1 = 0;
                                     int quantidade2 = 0;
                                     for (Item produtosCarrinhoTemp : carrinho.getCarrinho()) {
@@ -132,6 +134,7 @@ public class Principal {
         return selecaoFinal;
     }
 
+    //Função que recebe um fornecedor e calcula a média de avaliações dele
     public float mediaAvaliacao(Fornecedor fornecedor) {
         float acumulador = 0;
         float contador = 0;
@@ -144,6 +147,7 @@ public class Principal {
         return acumulador / contador;
     }
 
+    //Função que formata, calcula e exibe a lista de ofertas selecionadas ao usuário
     public void mostrarResultado(ArrayList<TabelaPrecos> listaCompras) {
         int indisponiveis = 0;
         int unidades = 0;
@@ -176,6 +180,6 @@ public class Principal {
         }
         System.out.println(indisponiveis + " Produtos indisponíveis");
         System.out.println("=====================================");
-        System.out.println("Valor total: " + total + "R$");
+        System.out.println("Valor total: " + total + " R$");
     }
 }

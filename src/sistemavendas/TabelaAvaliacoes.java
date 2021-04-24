@@ -1,5 +1,6 @@
 package sistemavendas;
 
+//A classe TabelaAvaliacoes contem todas as avaliações individuais de fornecedores registradas no sistema
 public class TabelaAvaliacoes {
     private Fornecedor fornecedor;
     private Integer avaliacao;

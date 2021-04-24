@@ -1,5 +1,6 @@
 package sistemavendas;
 
+//A classe Item representa os itens, sem relação com fornecedor ou preco
 public class Item {
     private String nome;
 

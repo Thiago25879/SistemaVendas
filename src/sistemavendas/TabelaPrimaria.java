@@ -1,5 +1,6 @@
 package sistemavendas;
 
+//A classe TabelaPrimaria contem a tabela que registra todas as comparações entre todos os fornecedores que ja foram feitas anteriormente
 public class TabelaPrimaria {
     
     //0 - Vazio

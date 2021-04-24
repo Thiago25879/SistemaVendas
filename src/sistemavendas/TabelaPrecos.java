@@ -1,5 +1,6 @@
 package sistemavendas;
 
+//A classe TabelaPrecos é a lista de todas as ofertas de todos os itens ofertados
 public class TabelaPrecos {
     private Fornecedor fornecedor;
     private Item item;

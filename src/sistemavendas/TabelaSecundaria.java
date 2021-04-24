@@ -1,7 +1,6 @@
 package sistemavendas;
 
-import java.util.ArrayList;
-
+//A classe TabelaSecundaria contem a tabela com a média de avaliação de todos os fornecedores que ofertam os itens desejados
 public class TabelaSecundaria {
     
     private Fornecedor tabelaFornecedores[];
