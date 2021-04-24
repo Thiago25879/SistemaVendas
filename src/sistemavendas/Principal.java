@@ -1,16 +1,17 @@
 package sistemavendas;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
-public class Principal {
-
-    //Variáveis de funcionamento
-    Scanner scan = new Scanner(System.in);
+public class Principal {    
+    //Listas
+    ArrayList<Item> listaItems = new ArrayList<Item>();
+    ArrayList<Fornecedor> listaFornecedores = new ArrayList<Fornecedor>();
 
     //Variáveis de entrada
-    ArrayList<TabelaPrecos> tabelaPrecos = new ArrayList();
-    ArrayList<TabelaAvaliacoes> avaliacoes = new ArrayList();
+    ArrayList<TabelaPrecos> tabelaPrecos = new ArrayList<TabelaPrecos>();
+    ArrayList<TabelaAvaliacoes> avaliacoes = new ArrayList<TabelaAvaliacoes>();
     Carrinho carrinho = new Carrinho();
 
     //Variáveis de processamento
@@ -27,7 +28,7 @@ public class Principal {
 
         //Preenchemos a tabela fornecedores com todos os fornecedores que oferecem os itens desejados
         for (TabelaPrecos entrada : itens.getEntrada()) {
-            if (!fornecedores.getEntrada().contains(entrada)) {
+            if (!fornecedores.getEntrada().contains(entrada.getFornecedor())) {
                 fornecedores.getEntrada().add(entrada.getFornecedor());
             }
         }
@@ -48,17 +49,22 @@ public class Principal {
             TabelaPrecos itemTabela = null;
             //Esse for esta iterando por toda a tabela de precos em busca da melhor opcao
             for (TabelaPrecos entradaTabela : itens.getEntrada()) {
-                if (entradaTabela.equals(entradaCarrinho)) {
+                if (entradaTabela.getItem().equals(entradaCarrinho)) {
                     if (itemTabela == null) {
                         itemTabela = entradaTabela;
                     } else {
-                        switch (primaria.getTabela()[itens.getEntrada().indexOf(itemTabela)][itens.getEntrada().indexOf(entradaTabela)]) {
+                        //Isolamos os fornecedores a serem comparados
+                        Fornecedor fornecedor1 = itens.getEntrada().get(itens.getEntrada().indexOf(itemTabela)).getFornecedor();
+                        Fornecedor fornecedor2 = itens.getEntrada().get(itens.getEntrada().indexOf(entradaTabela)).getFornecedor();
+                        switch (primaria.getTabela()[fornecedores.getEntrada().indexOf(fornecedor1)][fornecedores.getEntrada().indexOf(fornecedor2)]) {
                             //Essa comparação ainda não foi feita
                             case 0:
-                                if(secundaria.getTabelaAvaliacaoMedia()[itens.getEntrada().indexOf(itemTabela)] >= itens.getEntrada().indexOf(entradaTabela)){
-                                    primaria.getTabela()[itens.getEntrada().indexOf(itemTabela)][itens.getEntrada().indexOf(entradaTabela)] = 1;
+                                if(secundaria.getTabelaAvaliacaoMedia()[fornecedores.getEntrada().indexOf(fornecedor1)] >= secundaria.getTabelaAvaliacaoMedia()[fornecedores.getEntrada().indexOf(fornecedor2)]){
+                                    primaria.getTabela()[fornecedores.getEntrada().indexOf(fornecedor1)][fornecedores.getEntrada().indexOf(fornecedor2)] = 1;
+                                    primaria.getTabela()[fornecedores.getEntrada().indexOf(fornecedor2)][fornecedores.getEntrada().indexOf(fornecedor1)] = 2;
                                 }else{
-                                    primaria.getTabela()[itens.getEntrada().indexOf(itemTabela)][itens.getEntrada().indexOf(entradaTabela)] = 2;
+                                    primaria.getTabela()[fornecedores.getEntrada().indexOf(fornecedor1)][fornecedores.getEntrada().indexOf(fornecedor2)] = 2;
+                                    primaria.getTabela()[fornecedores.getEntrada().indexOf(fornecedor2)][fornecedores.getEntrada().indexOf(fornecedor1)] = 1;
                                     itemTabela = entradaTabela;
                                 }
                                 break;
@@ -75,6 +81,7 @@ public class Principal {
                 }
             }
             selecaoFinal.add(itemTabela);
+            itemTabela = null;
         }
         return selecaoFinal;
     }

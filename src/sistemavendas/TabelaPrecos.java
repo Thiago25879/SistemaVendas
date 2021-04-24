@@ -40,8 +40,4 @@ public class TabelaPrecos {
     public void setPreco(float preco) {
         this.preco = preco;
     }
-    
-    
-    
-    
 }
