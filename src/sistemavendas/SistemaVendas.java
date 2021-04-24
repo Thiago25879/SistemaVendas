@@ -1,5 +1,6 @@
 package sistemavendas;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class SistemaVendas {
@@ -51,7 +52,8 @@ public class SistemaVendas {
         menu.carrinho.addItem(menu.listaItems.get(3));
         menu.carrinho.addItem(menu.listaItems.get(2));
         
-        menu.processar(menu.carrinho);
+        ArrayList<TabelaPrecos> selecaoFinal =  menu.processar(menu.carrinho);
+        int a = 0;
     }
     
     

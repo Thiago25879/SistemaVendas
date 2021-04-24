@@ -44,86 +44,91 @@ public class Principal {
         TabelaPrimaria primaria = new TabelaPrimaria(fornecedores.getEntrada().size());
         //Lista que retornará todas as entradas finais
         ArrayList<TabelaPrecos> selecaoFinal = new ArrayList<TabelaPrecos>();
+        return processar(carrinho, primaria, secundaria, selecaoFinal);
+    }
+
+    public ArrayList processar(Carrinho carrinho, TabelaPrimaria primaria, TabelaSecundaria secundaria, ArrayList<TabelaPrecos> selecaoFinal) {
         //Esse for garantirá que teremos uma entrada de cada um dos itens do carrinho
-        for (Item entradaCarrinho : carrinho.getCarrinho()) {
-            //A variavel abaixo será a entra da tabela de precos que está como a melhor escolha atualmente
-            TabelaPrecos itemTabela = null;
-            //Esse for esta iterando por toda a tabela de precos em busca da melhor opcao
-            for (TabelaPrecos entradaTabela : itens.getEntrada()) {
-                if (entradaTabela.getItem().equals(entradaCarrinho)) {
-                    if (itemTabela == null) {
-                        itemTabela = entradaTabela;
-                    } else {
-                        //Isolamos os fornecedores a serem comparados
-                        Fornecedor fornecedor1 = itens.getEntrada().get(itens.getEntrada().indexOf(itemTabela)).getFornecedor();
-                        Fornecedor fornecedor2 = itens.getEntrada().get(itens.getEntrada().indexOf(entradaTabela)).getFornecedor();
-                        switch (primaria.getTabela()[fornecedores.getEntrada().indexOf(fornecedor1)][fornecedores.getEntrada().indexOf(fornecedor2)]) {
-                            //Essa comparação ainda não foi feita
-                            case 0:
-                                if (secundaria.getTabelaAvaliacaoMedia()[fornecedores.getEntrada().indexOf(fornecedor1)] > secundaria.getTabelaAvaliacaoMedia()[fornecedores.getEntrada().indexOf(fornecedor2)]) {
-                                    //Atual é maior
-                                    primaria.getTabela()[fornecedores.getEntrada().indexOf(fornecedor1)][fornecedores.getEntrada().indexOf(fornecedor2)] = 1;
-                                    primaria.getTabela()[fornecedores.getEntrada().indexOf(fornecedor2)][fornecedores.getEntrada().indexOf(fornecedor1)] = 2;
-                                } else {
-                                    if (secundaria.getTabelaAvaliacaoMedia()[fornecedores.getEntrada().indexOf(fornecedor1)] < secundaria.getTabelaAvaliacaoMedia()[fornecedores.getEntrada().indexOf(fornecedor2)]) {
-                                        //Novo é maior
-                                        primaria.getTabela()[fornecedores.getEntrada().indexOf(fornecedor1)][fornecedores.getEntrada().indexOf(fornecedor2)] = 2;
-                                        primaria.getTabela()[fornecedores.getEntrada().indexOf(fornecedor2)][fornecedores.getEntrada().indexOf(fornecedor1)] = 1;
-                                        itemTabela = entradaTabela;
-                                    } else {
-                                        //Fornecedores tem a mesma avaliação média, desempate por preço necessário
-                                        int quantidade1 = 0;
-                                        int quantidade2 = 0;
-                                        for (Item produtosCarrinhoTemp : carrinho.getCarrinho()) {
-                                            if (produtosCarrinhoTemp.equals(itens.getEntrada().get(itens.getEntrada().indexOf(itemTabela)).getItem())) {
-                                                quantidade1++;
-                                            }
-                                            if (produtosCarrinhoTemp.equals(itens.getEntrada().get(itens.getEntrada().indexOf(entradaTabela)).getItem())) {
-                                                quantidade2++;
-                                            }
-                                        }
-                                        Float preco1 = quantidade1 * itens.getEntrada().get(itens.getEntrada().indexOf(itemTabela)).getPreco() + fornecedor1.getFrete();
-                                        Float preco2 = quantidade2 * itens.getEntrada().get(itens.getEntrada().indexOf(entradaTabela)).getPreco() + fornecedor2.getFrete();
-                                        if (preco1 > preco2) {
-                                            itemTabela = entradaTabela;
-                                        }
-                                    }
-                                }
-                                break;
-                            //Essa comparação ja foi feita e o atual é maior
-                            case 1:
-                                //O atual já é o maior, então nada precisa ser feito
-                                break;
-                            //Essa comparação ja foi feita e o novo é maior
-                            case 2:
-                                itemTabela = entradaTabela;
-                                break;
-                            //Essa comparação ja foi feita e eles são iguais
-                            case 3:
-                                //Fornecedores tem a mesma avaliação média, desempate por preço necessário
-                                int quantidade1 = 0;
-                                int quantidade2 = 0;
-                                for (Item produtosCarrinhoTemp : carrinho.getCarrinho()) {
-                                    if (produtosCarrinhoTemp.equals(itens.getEntrada().get(itens.getEntrada().indexOf(itemTabela)).getItem())) {
-                                        quantidade1++;
-                                    }
-                                    if (produtosCarrinhoTemp.equals(itens.getEntrada().get(itens.getEntrada().indexOf(entradaTabela)).getItem())) {
-                                        quantidade2++;
-                                    }
-                                }
-                                Float preco1 = quantidade1 * itens.getEntrada().get(itens.getEntrada().indexOf(itemTabela)).getPreco() + fornecedor1.getFrete();
-                                Float preco2 = quantidade2 * itens.getEntrada().get(itens.getEntrada().indexOf(entradaTabela)).getPreco() + fornecedor2.getFrete();
-                                if (preco1 > preco2) {
+        Item entradaCarrinho = carrinho.getCarrinho().remove(0);
+        //A variavel abaixo será a entra da tabela de precos que está como a melhor escolha atualmente
+        TabelaPrecos itemTabela = null;
+        //Esse for esta iterando por toda a tabela de precos em busca da melhor opcao
+        for (TabelaPrecos entradaTabela : itens.getEntrada()) {
+            if (entradaTabela.getItem().equals(entradaCarrinho)) {
+                if (itemTabela == null) {
+                    itemTabela = entradaTabela;
+                } else {
+                    //Isolamos os fornecedores a serem comparados
+                    Fornecedor fornecedor1 = itens.getEntrada().get(itens.getEntrada().indexOf(itemTabela)).getFornecedor();
+                    Fornecedor fornecedor2 = itens.getEntrada().get(itens.getEntrada().indexOf(entradaTabela)).getFornecedor();
+                    switch (primaria.getTabela()[fornecedores.getEntrada().indexOf(fornecedor1)][fornecedores.getEntrada().indexOf(fornecedor2)]) {
+                        //Essa comparação ainda não foi feita
+                        case 0:
+                            if (secundaria.getTabelaAvaliacaoMedia()[fornecedores.getEntrada().indexOf(fornecedor1)] > secundaria.getTabelaAvaliacaoMedia()[fornecedores.getEntrada().indexOf(fornecedor2)]) {
+                                //Atual é maior
+                                primaria.getTabela()[fornecedores.getEntrada().indexOf(fornecedor1)][fornecedores.getEntrada().indexOf(fornecedor2)] = 1;
+                                primaria.getTabela()[fornecedores.getEntrada().indexOf(fornecedor2)][fornecedores.getEntrada().indexOf(fornecedor1)] = 2;
+                            } else {
+                                if (secundaria.getTabelaAvaliacaoMedia()[fornecedores.getEntrada().indexOf(fornecedor1)] < secundaria.getTabelaAvaliacaoMedia()[fornecedores.getEntrada().indexOf(fornecedor2)]) {
+                                    //Novo é maior
+                                    primaria.getTabela()[fornecedores.getEntrada().indexOf(fornecedor1)][fornecedores.getEntrada().indexOf(fornecedor2)] = 2;
+                                    primaria.getTabela()[fornecedores.getEntrada().indexOf(fornecedor2)][fornecedores.getEntrada().indexOf(fornecedor1)] = 1;
                                     itemTabela = entradaTabela;
+                                } else {
+                                    //Fornecedores tem a mesma avaliação média, desempate por preço necessário
+                                    int quantidade1 = 0;
+                                    int quantidade2 = 0;
+                                    for (Item produtosCarrinhoTemp : carrinho.getCarrinho()) {
+                                        if (produtosCarrinhoTemp.equals(itens.getEntrada().get(itens.getEntrada().indexOf(itemTabela)).getItem())) {
+                                            quantidade1++;
+                                        }
+                                        if (produtosCarrinhoTemp.equals(itens.getEntrada().get(itens.getEntrada().indexOf(entradaTabela)).getItem())) {
+                                            quantidade2++;
+                                        }
+                                    }
+                                    Float preco1 = quantidade1 * itens.getEntrada().get(itens.getEntrada().indexOf(itemTabela)).getPreco() + fornecedor1.getFrete();
+                                    Float preco2 = quantidade2 * itens.getEntrada().get(itens.getEntrada().indexOf(entradaTabela)).getPreco() + fornecedor2.getFrete();
+                                    if (preco1 > preco2) {
+                                        itemTabela = entradaTabela;
+                                    }
                                 }
-                                break;
-                        }
+                            }
+                            break;
+                        //Essa comparação ja foi feita e o atual é maior
+                        case 1:
+                            //O atual já é o maior, então nada precisa ser feito
+                            break;
+                        //Essa comparação ja foi feita e o novo é maior
+                        case 2:
+                            itemTabela = entradaTabela;
+                            break;
+                        //Essa comparação ja foi feita e eles são iguais
+                        case 3:
+                            //Fornecedores tem a mesma avaliação média, desempate por preço necessário
+                            int quantidade1 = 0;
+                            int quantidade2 = 0;
+                            for (Item produtosCarrinhoTemp : carrinho.getCarrinho()) {
+                                if (produtosCarrinhoTemp.equals(itens.getEntrada().get(itens.getEntrada().indexOf(itemTabela)).getItem())) {
+                                    quantidade1++;
+                                }
+                                if (produtosCarrinhoTemp.equals(itens.getEntrada().get(itens.getEntrada().indexOf(entradaTabela)).getItem())) {
+                                    quantidade2++;
+                                }
+                            }
+                            Float preco1 = quantidade1 * itens.getEntrada().get(itens.getEntrada().indexOf(itemTabela)).getPreco() + fornecedor1.getFrete();
+                            Float preco2 = quantidade2 * itens.getEntrada().get(itens.getEntrada().indexOf(entradaTabela)).getPreco() + fornecedor2.getFrete();
+                            if (preco1 > preco2) {
+                                itemTabela = entradaTabela;
+                            }
+                            break;
                     }
                 }
             }
-            selecaoFinal.add(itemTabela);
-            itemTabela = null;
         }
+        if (carrinho.getCarrinho().size() != 0) {
+            processar(carrinho, primaria, secundaria, selecaoFinal);
+        }
+        selecaoFinal.add(itemTabela);
         return selecaoFinal;
     }
 
