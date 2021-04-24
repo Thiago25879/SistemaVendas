@@ -143,4 +143,16 @@ public class Principal {
         }
         return acumulador / contador;
     }
+
+    public void mostrarResultado(ArrayList<TabelaPrecos> listaCompras) {
+        System.out.println("====== Lista De Compras ======");
+        System.out.println("");
+        for (TabelaPrecos item : listaCompras) {
+            if (item == null) {
+                System.out.println("Produto indisponível");
+            } else {
+                System.out.println("Item: " + item.getItem().getNome() + " || Fornecedor: " + item.getFornecedor().getNome() + " || Preço: " + item.getPreco() + " || Frete: " + item.getFornecedor().getFrete());
+            }
+        }
+    }
 }

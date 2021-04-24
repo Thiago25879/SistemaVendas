@@ -53,7 +53,7 @@ public class SistemaVendas {
         menu.carrinho.addItem(menu.listaItems.get(2));
         
         ArrayList<TabelaPrecos> selecaoFinal =  menu.processar(menu.carrinho);
-        int a = 0;
+        menu.mostrarResultado(selecaoFinal);
     }
     
     
