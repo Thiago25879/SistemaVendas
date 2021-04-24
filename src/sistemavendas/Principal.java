@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Principal {    
+public class Principal {
+
     //Listas
     ArrayList<Item> listaItems = new ArrayList<Item>();
     ArrayList<Fornecedor> listaFornecedores = new ArrayList<Fornecedor>();
@@ -59,13 +60,34 @@ public class Principal {
                         switch (primaria.getTabela()[fornecedores.getEntrada().indexOf(fornecedor1)][fornecedores.getEntrada().indexOf(fornecedor2)]) {
                             //Essa comparação ainda não foi feita
                             case 0:
-                                if(secundaria.getTabelaAvaliacaoMedia()[fornecedores.getEntrada().indexOf(fornecedor1)] >= secundaria.getTabelaAvaliacaoMedia()[fornecedores.getEntrada().indexOf(fornecedor2)]){
+                                if (secundaria.getTabelaAvaliacaoMedia()[fornecedores.getEntrada().indexOf(fornecedor1)] > secundaria.getTabelaAvaliacaoMedia()[fornecedores.getEntrada().indexOf(fornecedor2)]) {
+                                    //Atual é maior
                                     primaria.getTabela()[fornecedores.getEntrada().indexOf(fornecedor1)][fornecedores.getEntrada().indexOf(fornecedor2)] = 1;
                                     primaria.getTabela()[fornecedores.getEntrada().indexOf(fornecedor2)][fornecedores.getEntrada().indexOf(fornecedor1)] = 2;
-                                }else{
-                                    primaria.getTabela()[fornecedores.getEntrada().indexOf(fornecedor1)][fornecedores.getEntrada().indexOf(fornecedor2)] = 2;
-                                    primaria.getTabela()[fornecedores.getEntrada().indexOf(fornecedor2)][fornecedores.getEntrada().indexOf(fornecedor1)] = 1;
-                                    itemTabela = entradaTabela;
+                                } else {
+                                    if (secundaria.getTabelaAvaliacaoMedia()[fornecedores.getEntrada().indexOf(fornecedor1)] < secundaria.getTabelaAvaliacaoMedia()[fornecedores.getEntrada().indexOf(fornecedor2)]) {
+                                        //Novo é maior
+                                        primaria.getTabela()[fornecedores.getEntrada().indexOf(fornecedor1)][fornecedores.getEntrada().indexOf(fornecedor2)] = 2;
+                                        primaria.getTabela()[fornecedores.getEntrada().indexOf(fornecedor2)][fornecedores.getEntrada().indexOf(fornecedor1)] = 1;
+                                        itemTabela = entradaTabela;
+                                    } else {
+                                        //Fornecedores tem a mesma avaliação média, desempate por preço necessário
+                                        int quantidade1 = 0;
+                                        int quantidade2 = 0;
+                                        for (Item produtosCarrinhoTemp : carrinho.getCarrinho()) {
+                                            if (produtosCarrinhoTemp.equals(itens.getEntrada().get(itens.getEntrada().indexOf(itemTabela)).getItem())) {
+                                                quantidade1++;
+                                            }
+                                            if (produtosCarrinhoTemp.equals(itens.getEntrada().get(itens.getEntrada().indexOf(entradaTabela)).getItem())) {
+                                                quantidade2++;
+                                            }
+                                        }
+                                        Float preco1 = quantidade1 * itens.getEntrada().get(itens.getEntrada().indexOf(itemTabela)).getPreco() + fornecedor1.getFrete();
+                                        Float preco2 = quantidade2 * itens.getEntrada().get(itens.getEntrada().indexOf(entradaTabela)).getPreco() + fornecedor2.getFrete();
+                                        if (preco1 > preco2) {
+                                            itemTabela = entradaTabela;
+                                        }
+                                    }
                                 }
                                 break;
                             //Essa comparação ja foi feita e o atual é maior
@@ -75,6 +97,25 @@ public class Principal {
                             //Essa comparação ja foi feita e o novo é maior
                             case 2:
                                 itemTabela = entradaTabela;
+                                break;
+                            //Essa comparação ja foi feita e eles são iguais
+                            case 3:
+                                //Fornecedores tem a mesma avaliação média, desempate por preço necessário
+                                int quantidade1 = 0;
+                                int quantidade2 = 0;
+                                for (Item produtosCarrinhoTemp : carrinho.getCarrinho()) {
+                                    if (produtosCarrinhoTemp.equals(itens.getEntrada().get(itens.getEntrada().indexOf(itemTabela)).getItem())) {
+                                        quantidade1++;
+                                    }
+                                    if (produtosCarrinhoTemp.equals(itens.getEntrada().get(itens.getEntrada().indexOf(entradaTabela)).getItem())) {
+                                        quantidade2++;
+                                    }
+                                }
+                                Float preco1 = quantidade1 * itens.getEntrada().get(itens.getEntrada().indexOf(itemTabela)).getPreco() + fornecedor1.getFrete();
+                                Float preco2 = quantidade2 * itens.getEntrada().get(itens.getEntrada().indexOf(entradaTabela)).getPreco() + fornecedor2.getFrete();
+                                if (preco1 > preco2) {
+                                    itemTabela = entradaTabela;
+                                }
                                 break;
                         }
                     }
@@ -89,8 +130,8 @@ public class Principal {
     public float mediaAvaliacao(Fornecedor fornecedor) {
         float acumulador = 0;
         float contador = 0;
-        for(TabelaAvaliacoes avaliacao: avaliacoes){
-            if(avaliacao.getFornecedor().equals(fornecedor)){
+        for (TabelaAvaliacoes avaliacao : avaliacoes) {
+            if (avaliacao.getFornecedor().equals(fornecedor)) {
                 acumulador += avaliacao.getAvaliacao();
                 contador++;
             }

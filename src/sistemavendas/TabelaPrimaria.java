@@ -5,6 +5,7 @@ public class TabelaPrimaria {
     //0 - Vazio
     //1 - Maior
     //2 - Menor
+    //3 - Igual
     
     private Integer tabela[][];
 
