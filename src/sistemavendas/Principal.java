@@ -154,7 +154,7 @@ public class Principal {
         Float total = Float.valueOf("0");
         ArrayList<TabelaPrecos> remocoes = new ArrayList<TabelaPrecos>();
         ArrayList<Fornecedor> fornecedoresEscolhidos = new ArrayList<Fornecedor>();
-        System.out.println("====== Lista De Compras ======");
+        System.out.println("======== Lista De Compras ========");
         while (!listaCompras.isEmpty()) {
             if (listaCompras.get(0) == null) {
                 indisponiveis++;
@@ -166,7 +166,7 @@ public class Principal {
                         remocoes.add(duplicatas);
                     }
                 }
-                System.out.println(unidades + " x Item: " + listaCompras.get(0).getItem().getNome() + " || Fornecedor: " + listaCompras.get(0).getFornecedor().getNome() + " || Preço: " + listaCompras.get(0).getPreco() + " || Frete: " + listaCompras.get(0).getFornecedor().getFrete());
+                System.out.printf(unidades + " x Item: " + listaCompras.get(0).getItem().getNome() + " || Fornecedor: " + listaCompras.get(0).getFornecedor().getNome() + "|| Avaliação média: %.2f || Preço: " + listaCompras.get(0).getPreco() + " || Frete: " + listaCompras.get(0).getFornecedor().getFrete() + "\n", mediaAvaliacao(listaCompras.get(0).getFornecedor()));
                 if (fornecedoresEscolhidos.contains(listaCompras.get(0).getFornecedor())) {
                     total += unidades * listaCompras.get(0).getPreco();
                 } else {
